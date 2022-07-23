@@ -1,7 +1,8 @@
 import requests
+from sympy import re
 import urllib3
 import pandas as pd
-from pandas.io.json import json_normalize
+from pandas import json_normalize
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -24,15 +25,24 @@ res = requests.post(auth_url, data=payload, verify=False)
 access_token = res.json()['access_token']
 # print("Access Token = {}\n".format(access_token))
 
-header = {'Authorization': 'Bearer ' + access_token}
-param = {'per_page': 200, 'page': 1}
-my_dataset = requests.get(activites_url, headers=header, params=param).json()
+
 
 # print(my_dataset)
 
-data = json_normalize(my_dataset)
-print(data.columns)
-print(data.shape)
+def get_auth_token(payload, auth_url):
+    res = requests.post(auth_url, data=payload, verify=False)
+    return res.json()['access_token']
 
-print(data.head())
-print(type(data))
+
+def get_data():
+    header = {'Authorization': 'Bearer ' + get_auth_token(payload, auth_url)}
+    param = {'per_page': 200, 'page': 1}
+    dataset = requests.get(activites_url, headers=header, params=param).json()
+    return json_normalize(dataset)
+
+# data = json_normalize(my_dataset)
+# print(data.columns)
+# print(data.shape)
+
+# print(data.head())
+# print(type(data))
