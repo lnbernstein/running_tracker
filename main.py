@@ -28,6 +28,16 @@ df['week'] = df.start_date.dt.isocalendar().week
 df['year'] = df.start_date.dt.isocalendar().year
 df['distance_miles'] = df.distance / 1609
 df['rank'] = df.start_date.rank()-1
+df['moving_time_minutes'] = df.moving_time/60
+
+conditions = [
+    (df['moving_time_minutes'] <= 20),
+    (df['moving_time_minutes'] > 20) & (df['moving_time_minutes'] <= 40),
+    # (df['moving_time_minutes'] > 40) & (df['moving_time_minutes'] <= 60)
+]
+
+choices = ['short (<= 20 minutes)', 'medium (21 to 40 minutes)']
+df['length_cut'] = np.select(conditions, choices, default='long (> 40 minutes)')
 
 #  correct because  year query used, not checked yet
 def weekly_mileage():
@@ -80,6 +90,14 @@ st.pyplot(fig=fig)
 fig1 = px.line(df, x='rank', y='average_heartrate', width=800, height=400, title='Average Heartrate over Time')
 fig1.update_layout(title_x=0.5, xaxis_title="Time")
 st.plotly_chart(figure_or_data=fig1)
+
+fig2 = px.histogram(df, x='length_cut', color='length_cut', width=800, height=400, 
+                        category_orders={'length_cut':['short (<= 20 minutes)', 'medium (21 to 40 minutes)', 'long (> 40 minutes)']})
+fig2.update_layout(title='Run Lengths Histogram', title_x=0.5, xaxis_title='Distribution of Run Lengths', )
+st.plotly_chart(figure_or_data=fig2)
+
+fig3 = px.histogram(df, x='moving_time_minutes')
+st.plotly_chart(figure_or_data=fig3)
 
 
 

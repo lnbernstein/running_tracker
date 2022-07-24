@@ -20,9 +20,9 @@ payload = {
 }
 
 # print("Requesting Token...\n")
-res = requests.post(auth_url, data=payload, verify=False)
+# res = requests.post(auth_url, data=payload, verify=False)
 # print(res.json())
-access_token = res.json()['access_token']
+# access_token = res.json()['access_token']
 # print("Access Token = {}\n".format(access_token))
 
 
@@ -39,6 +39,11 @@ def get_data():
     param = {'per_page': 200, 'page': 1}
     dataset = requests.get(activites_url, headers=header, params=param).json()
     return json_normalize(dataset)
+
+
+frame = get_data()
+print(frame.shape)
+print(frame.head())
 
 # data = json_normalize(my_dataset)
 # print(data.columns)
