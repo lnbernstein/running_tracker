@@ -4,6 +4,10 @@ import numpy as np
 import pandas as pd
 import streamlit.components.v1 as components
 import api_strava
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+sns.set(style="whitegrid", palette="pastel")
 
 df = api_strava.get_data()
 pd.options.display.float_format = "{:,.2f}".format
@@ -23,25 +27,20 @@ df.start_date = pd.to_datetime(df.start_date)
 df['week'] = df.start_date.dt.isocalendar().week
 df['year'] = df.start_date.dt.isocalendar().year
 df['distance_miles'] = df.distance / 1609
+df['rank'] = df.start_date.rank()-1
 
+#  correct because  year query used, not checked yet
 def weekly_mileage():
     year, week_num, day_of_week = datetime.date.today().isocalendar()
-    this_week = df[df['week'] == week_num]
+    this_week = df[(df['week'] == week_num) & (df['year'] == year)]
     return this_week['distance_miles'].sum()
 
-# def generate_run(weekly_mileage, runs_completed, runs_of_week):
-#     miles_per_run = weekly_mileage/runs_of_week
-#     if(runs_completed != runs_of_week-1):
-#         return miles_per_run
-#     else:
-#         return miles_per_run*1.75
-
-
-# chart_data = pd.DataFrame(
-#      np.random.randn(20, 3),
-#      columns=['a', 'b', 'c'])
-
-
+def generate_run(weekly_mileage, runs_completed, runs_of_week):
+    miles_per_run = weekly_mileage()/runs_of_week
+    if(runs_completed != runs_of_week-1):
+        return miles_per_run
+    else:
+        return miles_per_run*1.75
 
 
 
@@ -55,8 +54,8 @@ with col1:
     st.write(' ')
 
 with col2:
-    # st.metric("    Today's Mileage", generate_run(weekly_mileage, runs_completed, runs_of_week))
-    st.write('hi')
+    st.metric("    Today's Mileage", generate_run(weekly_mileage, runs_completed, runs_of_week))
+    # st.write('hi')
 
 with col3:
     st.write(' ')
@@ -74,7 +73,16 @@ with col3:
     st.metric('Average Pace', round(df.average_speed.mean(),2), int(df.average_speed.diff()[1]))
 
 
-# st.line_chart(chart_data)
+fig = plt.figure(figsize=(10,4))
+sns.lineplot(x='rank', y='average_heartrate', data=df).set(title='Average Heartrate over Time', xlabel='Time')
+st.pyplot(fig=fig)
+
+fig1 = px.line(df, x='rank', y='average_heartrate', width=800, height=400, title='Average Heartrate over Time')
+fig1.update_layout(title_x=0.5, xaxis_title="Time")
+st.plotly_chart(figure_or_data=fig1)
+
+
+
 # components.iframe("https://calendar.google.com/calendar/embed?src=c_mst8mkd08jsbukco439oht7gr8%40group.calendar.google.com&ctz=America%2FNew_York",
 #                     width=800, height=500, scrolling=True)
 
