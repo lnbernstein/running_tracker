@@ -9,6 +9,9 @@ import seaborn as sns
 import plotly.express as px
 sns.set(style="whitegrid", palette="pastel")
 
+
+# pandas section
+
 df = api_strava.get_data()
 pd.options.display.float_format = "{:,.2f}".format
 
@@ -51,6 +54,22 @@ def generate_run(weekly_mileage, runs_completed, runs_of_week):
         return miles_per_run
     else:
         return miles_per_run*1.75
+
+
+# streamlit section
+
+st.set_page_config(page_title="Running Tracker", page_icon="📈")
+
+# st.set_page_config(layout='wide')
+
+# with st.sidebar:
+#     add_radio = st.radio(
+#         "Choose a shipping method",
+#         ("Standard (5-15 days)", "Express (2-5 days)")
+#     )
+
+st.sidebar.success("Select a demo above.")
+
 
 
 
