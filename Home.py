@@ -19,10 +19,7 @@ print(df.shape)
 
 # df.to_csv('strava_data.csv')
 
-
-# weekly_mileage = 10
-runs_completed = 1
-runs_of_week = 4
+runs_rec = 5
 bpm = 172
 bpm_change = 4
 
@@ -48,9 +45,15 @@ def weekly_mileage():
     this_week = df[(df['week'] == week_num) & (df['year'] == year)]
     return this_week['distance_miles'].sum()
 
-def generate_run(weekly_mileage, runs_completed, runs_of_week):
-    miles_per_run = weekly_mileage()/runs_of_week
-    if(runs_completed != runs_of_week-1):
+def runs_completed():
+    year, week_num, day_of_week = datetime.date.today().isocalendar()
+    this_week = df[(df['week'] == week_num) & (df['year'] == year)]
+    return this_week.name.count()
+
+
+def generate_run(runs_rec):
+    miles_per_run = weekly_mileage() /runs_completed()
+    if(runs_completed() != runs_rec-1):
         return miles_per_run
     else:
         return miles_per_run*1.75
@@ -68,7 +71,7 @@ st.set_page_config(page_title="Running Tracker", page_icon="📈")
 #         ("Standard (5-15 days)", "Express (2-5 days)")
 #     )
 
-st.sidebar.success("Select a demo above.")
+st.sidebar.success("Running Tracker")
 
 
 
@@ -83,7 +86,7 @@ with col1:
     st.write(' ')
 
 with col2:
-    st.metric("    Today's Mileage", generate_run(weekly_mileage, runs_completed, runs_of_week))
+    st.metric("    Today's Mileage", generate_run(runs_rec))
     # st.write('hi')
 
 with col3:
