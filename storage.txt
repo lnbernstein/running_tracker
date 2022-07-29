@@ -1,0 +1,22 @@
+length_filter = st.selectbox("Select Run Length", pd.unique(df.length_cut))
+filtered = df[df['length_cut'] == length_filter]
+filtered['rank'] = filtered.start_date.rank()-1
+
+dash_fig1, dash_fig2, dash_fig3 = st.columns(3)
+with dash_fig1:
+    st.markdown("### Average Heartrate over Time")
+    d_fig = px.line(filtered, x='rank', y='average_heartrate')
+    st.write(d_fig)
+   
+with dash_fig2:
+    st.markdown("### Histogram of Moving Time")
+    d_fig2 = px.histogram(filtered, x='moving_time_minutes')
+    st.write(d_fig2)
+
+with dash_fig3:
+    st.markdown("### Average Heartrate over Time")
+    d_fig3 = px.line(filtered, x='rank', y='average_heartrate')
+    st.write(d_fig3)    
+
+st.markdown("### Detailed Data View")
+st.dataframe(filtered)
