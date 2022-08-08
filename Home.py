@@ -89,7 +89,7 @@ st.sidebar.write('Email me @ lnb337@stern.nyu.edu')
 image = Image.open('bernstein_headshot.jpeg')
 st.sidebar.image(image)
 
-layout = st.sidebar.beta_columns([2, 1])
+layout = st.sidebar.columns([2, 1])
 with layout[0]:
     st.write('Check out my [resume!](https://drive.google.com/file/d/1VvNS4UlRF0X-LvJ3iG0wQHrq_CkIoHik/view?usp=sharing)')
 
