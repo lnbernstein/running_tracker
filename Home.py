@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 import streamlit.components.v1 as components
 import api_strava
-# import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 sns.set(style="whitegrid", palette="pastel")
@@ -21,15 +20,8 @@ def get_data() -> pd.DataFrame():
 df = get_data()
 pd.options.display.float_format = "{:,.2f}".format
 
-BASE_MILEAGE = 10
-START_NUM_RUNS = 4
-
-# df.to_csv('strava_data.csv')
-
-runs_rec = 5
-bpm = 172
-bpm_change = 4
-base_mileage = 13
+START_NUM_RUNS = 4 #constant
+base_mileage = 13 # constant
 
 df.start_date = pd.to_datetime(df.start_date)
 df['week'] = df.start_date.dt.isocalendar().week
@@ -41,7 +33,6 @@ df['moving_time_minutes'] = df.moving_time/60
 conditions = [
     (df['moving_time_minutes'] <= 20),
     (df['moving_time_minutes'] > 20) & (df['moving_time_minutes'] <= 40),
-    # (df['moving_time_minutes'] > 40) & (df['moving_time_minutes'] <= 60)
 ]
 
 choices = ['short (<= 20 minutes)', 'medium (21 to 40 minutes)']
@@ -87,9 +78,6 @@ def generate_run():
 
 # streamlit section
 
-# st.set_page_config(layout='wide')
-
-# st.sidebar.success("Meet Me!")
 
 # sidebar section
 
@@ -100,6 +88,8 @@ st.sidebar.write('Email me @ lnb337@stern.nyu.edu')
 
 image = Image.open('bernstein_headshot.jpeg')
 st.sidebar.image(image)
+
+st.sidebar.write('Check out my [resume!]https://drive.google.com/file/d/1VvNS4UlRF0X-LvJ3iG0wQHrq_CkIoHik/view?usp=sharing')
 
 
 
@@ -162,6 +152,7 @@ fig3 = px.histogram(df, x='moving_time_minutes', color_discrete_sequence=['#FF9F
 st.plotly_chart(figure_or_data=fig3)
 
 
+# upcoming calendar feature
 
 # components.iframe("https://calendar.google.com/calendar/embed?src=c_mst8mkd08jsbukco439oht7gr8%40group.calendar.google.com&ctz=America%2FNew_York",
 #                     width=800, height=500, scrolling=True)
