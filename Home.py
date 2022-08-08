@@ -91,6 +91,9 @@ st.sidebar.image(image)
 
 st.sidebar.write('Check out my [resume!](https://drive.google.com/file/d/1VvNS4UlRF0X-LvJ3iG0wQHrq_CkIoHik/view?usp=sharing)')
 
+st.markdown("[![Foo](GitHub-Mark-64px.png)](https://github.com/lnbernstein/running_tracker)")
+
+
 
 
 # rest of page
