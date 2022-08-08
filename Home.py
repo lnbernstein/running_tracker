@@ -22,13 +22,14 @@ df = get_data()
 pd.options.display.float_format = "{:,.2f}".format
 
 BASE_MILEAGE = 10
-START_NUM_RUNS = 5
+START_NUM_RUNS = 4
 
 # df.to_csv('strava_data.csv')
 
 runs_rec = 5
 bpm = 172
 bpm_change = 4
+base_mileage = 13
 
 df.start_date = pd.to_datetime(df.start_date)
 df['week'] = df.start_date.dt.isocalendar().week
@@ -48,21 +49,32 @@ df['length_cut'] = np.select(conditions, choices, default='long (> 40 minutes)')
 
 
 def create_week_df():
+    '''Generates dataframe of runs for current week'''
     year, week_num, day_of_week = datetime.date.today().isocalendar()
     return df[(df['week'] == week_num) & (df['year'] == year)]
 
-#  correct because  year query used, not checked yet
+def create_last_week_df():
+    '''Generates dataframe of runs from one week in the past'''
+    year, week_num, day_of_week = datetime.date.today().isocalendar()
+    return df[(df['week'] == week_num-1) & (df['year'] == year)]
+
 def weekly_mileage():
+    '''Calculate mileage run this week'''
     this_week = create_week_df()
     return this_week['distance_miles'].sum()
 
+def last_weeks_mileage():
+    '''Calculate mileage run last week'''
+    last_week = create_last_week_df()
+    return last_week['distance_miles'].sum()
+
 def runs_completed():
+    '''Calculate number of runs this week'''
     this_week = create_week_df()
     return this_week.name.count()
 
-
 def generate_run():
-    base_mileage = 10
+    '''Using a week one mileage of 13 miles, generates daily run. Long run is defined as 30% of weekly mileage'''
     less_long_mileage = base_mileage*.7
     base_run = less_long_mileage/(START_NUM_RUNS-1)
     this_week = create_week_df()
@@ -70,54 +82,40 @@ def generate_run():
     if(num_runs_completed <= START_NUM_RUNS-1):
         return base_run
     else:
-        return base_run*1.25
+        return base_mileage*.3
     
-
-
-# def generate_run(runs_rec):
-#     long_run = BASE_MILEAGE*.25
-#     weekly_mileage = 2
-#     mileage_left = BASE_MILEAGE - weekly_mileage
-#     runs_left = START_NUM_RUNS - runs_completed() 
-#     # miles_per_run = weekly_mileage() /runs_completed()
-
-#     if(runs_left >= 2):
-#         return mileage_left/runs_left
-    
-#     if(runs_completed() != START_NUM_RUNS):
-        
-#     else:
-#         return miles_per_run*1.75
-
 
 # streamlit section
 
-
-
 # st.set_page_config(layout='wide')
 
-# with st.sidebar:
-#     add_radio = st.radio(
-#         "Choose a shipping method",
-#         ("Standard (5-15 days)", "Express (2-5 days)")
-#     )
+# st.sidebar.success("Meet Me!")
 
-st.sidebar.success("Running Tracker")
+st.sidebar.write('Hi! My name is Luke Bernstein and I am a Junior at NYU studying Finance and Computer Science.')
+
+st.sidebar.write('Add me: www.linkedin.com/in/luke-bernstein')
+st.sidebar.write('Email me @ lnb337@stern.nyu.edu')
 
 
-st.markdown("<h1 style='text-align: left;'>Becoming a Better Athlete</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: left;'>Becoming a Better Runner</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: left;'>Following the 10% rule, this application will automatically generate a run based on prior training</p>", unsafe_allow_html=True)
+
+
+topcol1, topcol2 = st.columns(2)
+with topcol1:
+    st.write('Training Start Date: August 15, 2022')
+with topcol2:
+    st.write('Base Week Mileage: ', base_mileage,  'miles')
 
 
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.write(' ')
+    st.metric('Runs Completed this week', runs_completed())
 
 with col2:
-    st.metric("    Today's Mileage", generate_run())
-    # st.write('hi')
+    st.metric("Today's Mileage", round(generate_run(), 2))
 
 with col3:
     st.write(' ')
@@ -126,7 +124,7 @@ with col3:
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric('Weekly Mileage', round(weekly_mileage(),2), 2)
+    st.metric('Weekly Mileage', round(weekly_mileage(),2), round(last_weeks_mileage(), 2))
 
 with col2:
     st.metric('Average Heart Rate', int(df.average_heartrate.mean()), int(df.average_heartrate.diff()[1]))
