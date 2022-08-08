@@ -1,5 +1,5 @@
 import requests
-# from sympy import re
+import streamlit as st
 import urllib3
 import pandas as pd
 from pandas import json_normalize
@@ -10,11 +10,24 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 auth_url = "https://www.strava.com/oauth/token"
 activites_url = "https://www.strava.com/api/v3/athlete/activities"
 
+client_id = st.secrets['client_id']
+client_secret = st.secrets['client_secret']
+refresh_token = st.secrets['refresh_token']
+
+# payload = {
+#     'client_id': "90249",
+#     'client_secret': '3ce3501c22aed4fbcd6475e48b57af686f1b17be',
+#     # 'refresh_token': '782dbf689a067a29c8c0b71806e36b230767bbc8',
+#     'refresh_token': '2f1ba6111a7c67ee301cfb9505530796ff26db6b',
+#     'grant_type': "refresh_token",
+#     'f': 'json'
+# }
+
 payload = {
-    'client_id': "90249",
-    'client_secret': '3ce3501c22aed4fbcd6475e48b57af686f1b17be',
+    'client_id': client_id,
+    'client_secret': client_secret,
     # 'refresh_token': '782dbf689a067a29c8c0b71806e36b230767bbc8',
-    'refresh_token': '2f1ba6111a7c67ee301cfb9505530796ff26db6b',
+    'refresh_token': refresh_token,
     'grant_type': "refresh_token",
     'f': 'json'
 }
