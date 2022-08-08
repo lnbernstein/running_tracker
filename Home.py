@@ -98,7 +98,7 @@ st.sidebar.write('Hi! My name is Luke Bernstein and I am a Junior at NYU studyin
 st.sidebar.write('Add me: www.linkedin.com/in/luke-bernstein')
 st.sidebar.write('Email me @ lnb337@stern.nyu.edu')
 
-image = Image.open('/Users/luke/Library/CloudStorage/OneDrive-nyu.edu/running_project/bernstein_headshot.jpeg')
+image = Image.open('bernstein_headshot.jpeg')
 st.sidebar.image(image)
 
 
