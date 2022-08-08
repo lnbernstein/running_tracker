@@ -1,5 +1,5 @@
 import datetime
-import this
+from PIL import Image
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -91,10 +91,19 @@ def generate_run():
 
 # st.sidebar.success("Meet Me!")
 
+# sidebar section
+
 st.sidebar.write('Hi! My name is Luke Bernstein and I am a Junior at NYU studying Finance and Computer Science.')
 
 st.sidebar.write('Add me: www.linkedin.com/in/luke-bernstein')
 st.sidebar.write('Email me @ lnb337@stern.nyu.edu')
+
+image = Image.open('/Users/luke/Library/CloudStorage/OneDrive-nyu.edu/Important Forms/bernstein_headshot.jpeg')
+st.sidebar.image(image)
+
+
+
+# rest of page
 
 
 st.markdown("<h1 style='text-align: left;'>Becoming a Better Runner</h1>", unsafe_allow_html=True)
