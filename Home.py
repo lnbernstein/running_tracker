@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import streamlit.components.v1 as components
 import api_strava
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 sns.set(style="whitegrid", palette="pastel")
