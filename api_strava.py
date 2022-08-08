@@ -1,5 +1,5 @@
 import requests
-from sympy import re
+# from sympy import re
 import urllib3
 import pandas as pd
 from pandas import json_normalize
