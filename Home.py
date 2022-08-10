@@ -97,9 +97,9 @@ with layout[1]:
     st.markdown("[![Github](https://github.com/lnbernstein/running_tracker/blob/main/GitHub-Mark-64px.png?raw=true)](https://github.com/lnbernstein/running_tracker)")
 
 
+ 
 
-
-# rest of page
+# rest of page text
 
 
 st.markdown("<h1 style='text-align: left;'>Becoming a Better Runner</h1>", unsafe_allow_html=True)
